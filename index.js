@@ -1,19 +1,19 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+const express = require('express');
 
-const app: Application = express();
-const PORT: number = 3000;
+const app = express();
+const PORT = 3000;
 
 app.use(express.json());
 
 // 🔹 Middleware: Registrar hora exata da requisição
-app.use((req: Request, res: Response, next: NextFunction): void => {
+app.use((req, res, next) => {
   const dataHora = new Date().toISOString();
   console.log(`Requisição feita em: ${dataHora}`);
   next();
 });
 
 // 🔹 Middleware bônus: Bloquear entre 00h e 06h
-app.use((req: Request, res: Response, next: NextFunction): void => {
+app.use((req, res, next) => {
   const hora = new Date().getHours();
   if (hora >= 0 && hora < 6) {
     res.status(403).json({ mensagem: 'Requisições bloqueadas entre 00h e 06h.' });
@@ -23,12 +23,12 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 });
 
 // 🔹 GET /usuarios
-app.get('/usuarios', (req: Request, res: Response): void => {
+app.get('/usuarios', (req, res) => {
   res.status(200).json({ mensagem: 'Lista de usuários' });
 });
 
 // 🔹 POST /usuarios
-app.post('/usuarios', (req: Request, res: Response): void => {
+app.post('/usuarios', (req, res) => {
   const { nome } = req.body;
   if (!nome) {
     res.status(400).json({ mensagem: 'Nome é obrigatório!' });
@@ -38,17 +38,17 @@ app.post('/usuarios', (req: Request, res: Response): void => {
 });
 
 // 🔹 PUT /usuarios/:id
-app.put('/usuarios/:id', (req: Request, res: Response): void => {
+app.put('/usuarios/:id', (req, res) => {
   res.status(200).json({ mensagem: 'Usuário atualizado completamente!' });
 });
 
 // 🔹 PATCH /usuarios/:id
-app.patch('/usuarios/:id', (req: Request, res: Response): void => {
+app.patch('/usuarios/:id', (req, res) => {
   res.status(200).json({ mensagem: 'Usuário atualizado parcialmente!' });
 });
 
 // 🔹 DELETE /usuarios/:id
-app.delete('/usuarios/:id', (req: Request, res: Response): void => {
+app.delete('/usuarios/:id', (req, res) => {
   const { id } = req.params;
   if (!id) {
     res.status(400).json({ mensagem: 'ID não enviado' });
@@ -58,7 +58,7 @@ app.delete('/usuarios/:id', (req: Request, res: Response): void => {
 });
 
 // 🔹 GET /sobre
-app.get('/sobre', (req: Request, res: Response): void => {
+app.get('/sobre', (req, res) => {
   res.status(200).json({
     nome: 'Rogério Machado',
     idade: 53,
@@ -67,7 +67,7 @@ app.get('/sobre', (req: Request, res: Response): void => {
 });
 
 // 🔹 POST /comentarios
-app.post('/comentarios', (req: Request, res: Response): void => {
+app.post('/comentarios', (req, res) => {
   const { texto } = req.body;
   if (!texto || texto.trim() === '') {
     res.status(400).json({ mensagem: 'Texto do comentário é obrigatório.' });
@@ -77,7 +77,7 @@ app.post('/comentarios', (req: Request, res: Response): void => {
 });
 
 // 🔹 DELETE /comentarios/:id
-app.delete('/comentarios/:id', (req: Request, res: Response): void => {
+app.delete('/comentarios/:id', (req, res) => {
   const { id } = req.params;
   if (!id) {
     res.status(400).json({ mensagem: 'ID do comentário é obrigatório.' });
@@ -87,11 +87,11 @@ app.delete('/comentarios/:id', (req: Request, res: Response): void => {
 });
 
 // 🔹 Rota 404
-app.use((req: Request, res: Response): void => {
+app.use((req, res) => {
   res.status(404).json({ mensagem: 'Rota não encontrada!' });
 });
 
 // 🔹 Iniciar servidor
-app.listen(PORT, (): void => {
+app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
